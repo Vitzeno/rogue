@@ -35,6 +35,7 @@ Player * setUpPlayer();
 Room * createRoom(int x, int y, int h, int w);
 Room ** createRooms();
 int renderRoom(Room * room);
+int connectRooms(const Position firstDoor,const Position secondDoor);
 
 int renderPlayer(Player * player);
 
@@ -94,7 +95,14 @@ Player * setUpPlayer() {
 
 /*
 This function creates a single rooms with the defeined
-specificaions.
+specificaions. It is also responsible for generating
+doors. Door indexes are counted counter clockwise
+	===0===
+	|	   |
+	1	   3	
+	|      |
+	===2===
+
 @param x position.x of room
 @param y position.y of room
 @param h height of romm
@@ -113,20 +121,19 @@ Room * createRoom(int x, int y, int h, int w) {
 
 	/* top door */
 	newRoom->doors[0].y = newRoom->position.y;
-	newRoom->doors[0].x = rand () % (w - 2) + newRoom->position.x + 1; //(w - 2) reduce range by 2 to ensure no corner doors
-	
-	/* bottom door */
-	newRoom->doors[1].y = newRoom->position.y + h - 1;
-	newRoom->doors[1].x = rand () % (w - 2) + newRoom->position.x + 1;
+	newRoom->doors[0].x = rand() % (w - 2) + newRoom->position.x + 1; //(w - 2) reduce range by 2 to ensure no corner doors
 
 	/* left door */
-	newRoom->doors[2].y = rand () % (h - 2) + newRoom->position.y + 1;
-	newRoom->doors[2].x = newRoom->position.x;
+	newRoom->doors[1].y = rand() % (h - 2) + newRoom->position.y + 1;
+	newRoom->doors[1].x = newRoom->position.x;
+
+	/* bottom door */
+	newRoom->doors[2].y = newRoom->position.y + h - 1;
+	newRoom->doors[2].x = rand() % (w - 2) + newRoom->position.x + 1;
 
 	/* right door */
-	newRoom->doors[3].y = rand () % (h - 2) + newRoom->position.y + 1;
+	newRoom->doors[3].y = rand() % (h - 2) + newRoom->position.y + 1;
 	newRoom->doors[3].x = newRoom->position.x + w - 1;
-
 
 	return newRoom;
 }
@@ -145,6 +152,8 @@ Room ** createRooms() {
 	renderRoom(rooms[0]);
 	renderRoom(rooms[1]);
 	renderRoom(rooms[2]);
+
+	connectRooms(rooms[0]->doors[3], rooms[2]->doors[1]);
 
 	return rooms;
 }
@@ -184,6 +193,21 @@ int renderRoom(Room * room) {
 
 	return 0;
 }
+
+/*
+This function takes two door position from different rooms and connects
+them.
+(keep parameters const so that they are not overwritten)
+@param firstDoor first door to connect 
+@param secondDoor second door to connect
+*/
+int connectRooms(const Position firstDoor, const Position secondDoor) {
+
+
+
+	return 0;
+}
+
 
 /*
 This function renders the player character and moves cursor back.
@@ -262,6 +286,8 @@ int checkPosition(int newPositionY, int newPositionX, Player * player) {
 
 	/* determines char at new position and what to do */
 	switch(mvinch(newPositionY, newPositionX)) {
+		case '+':
+		case '#':
 		case '.':
 			updatePlayerPosition(newPositionY, newPositionX, player);
 			break;
@@ -270,7 +296,6 @@ int checkPosition(int newPositionY, int newPositionX, Player * player) {
 			move(player->position.y, player->position.x);
 			break;
 	}
-
 
 	return 0;
 }
