@@ -4,6 +4,12 @@
 
 #define NUM_OF_ROOMS 6   
 
+#define TOP "="
+#define SIDE "|"
+#define DOOR "+"
+#define INTERIOR "."
+#define PLAYER "@"
+
 typedef struct Position {
 	int x;
 	int y;
@@ -102,6 +108,7 @@ Room * createRoom(int x, int y, int h, int w) {
 	newRoom->position.y = y;
 	newRoom->height = h;
 	newRoom->width = w;
+
 	srand(time(NULL));
 
 	/* top door */
@@ -153,27 +160,27 @@ int renderRoom(Room * room) {
 	/* rendering top and bottom of room */
 	for(x = room->position.x; x < room->position.x + room->width; x++) {
 		/* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
-		mvprintw(room->position.y, x, "-");
-		mvprintw(room->position.y + room->height - 1, x, "-");
+		mvprintw(room->position.y, x, TOP);
+		mvprintw(room->position.y + room->height - 1, x, TOP);
 	}
 
 	/* rendering interior and sides of room */
 	for(y = room->position.y + 1; y < room->position.y + room->height - 1; y++) {
 		/* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
-		mvprintw(y, room->position.x, "|");
-		mvprintw(y, room->position.x + room->width - 1, "|");
+		mvprintw(y, room->position.x, SIDE);
+		mvprintw(y, room->position.x + room->width - 1, SIDE);
 		/* render interior of room */
 		for(x = room->position.x + 1;x < room->position.x + room->width - 1;x++) {
 			/* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
-			mvprintw(y, x, ".");
+			mvprintw(y, x, INTERIOR);
 		}
 	}
 
 	/* renders doorss */
-	mvprintw(room->doors[0].y, room->doors[0].x, "+");
-	mvprintw(room->doors[1].y, room->doors[1].x, "+");
-	mvprintw(room->doors[2].y, room->doors[2].x, "+");
-	mvprintw(room->doors[3].y, room->doors[3].x, "+");
+	mvprintw(room->doors[0].y, room->doors[0].x, DOOR);
+	mvprintw(room->doors[1].y, room->doors[1].x, DOOR);
+	mvprintw(room->doors[2].y, room->doors[2].x, DOOR);
+	mvprintw(room->doors[3].y, room->doors[3].x, DOOR);
 
 	return 0;
 }
@@ -185,7 +192,7 @@ Should be calld once for every iteration of the game loop.
 */
 int renderPlayer(Player * player) {
 	/* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
-	mvprintw(player->position.y, player->position.x, "@");
+	mvprintw(player->position.y, player->position.x, PLAYER);
 	/* mvprint moves cursor after printing, need to move back using move function */
 	move(player->position.y, player->position.x);
 
@@ -278,7 +285,7 @@ last player position.
  */
 int updatePlayerPosition(int newPositionY, int newPositionX, Player * player) {
 
-	mvprintw(player->position.y, player->position.x, ".");
+	mvprintw(player->position.y, player->position.x, INTERIOR);
 	player->position.x = newPositionX;
 	player->position.y = newPositionY;
 	return 0;
