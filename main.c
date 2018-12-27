@@ -8,6 +8,7 @@
 #define SIDE "|"
 #define DOOR "+"
 #define INTERIOR "."
+#define HALLWAY "#"
 #define PLAYER "@"
 
 typedef struct Position {
@@ -145,15 +146,17 @@ Room ** createRooms() {
 	Room ** rooms;
 	rooms = malloc(sizeof(Room) * NUM_OF_ROOMS);
 
-	rooms[0] = createRoom(13, 13, 6, 8);
+	rooms[0] = createRoom(13, 10, 6, 8);
 	rooms[1] = createRoom(40, 2, 6, 8);
-	rooms[2] = createRoom(40, 10, 6, 12);
+	rooms[2] = createRoom(40, 20, 6, 12);
 
 	renderRoom(rooms[0]);
 	renderRoom(rooms[1]);
 	renderRoom(rooms[2]);
 
 	connectRooms(rooms[0]->doors[3], rooms[2]->doors[1]);
+	connectRooms(rooms[0]->doors[0], rooms[1]->doors[1]);
+	connectRooms(rooms[1]->doors[2], rooms[2]->doors[0]);
 
 	return rooms;
 }
@@ -196,12 +199,58 @@ int renderRoom(Room * room) {
 
 /*
 This function takes two door position from different rooms and connects
-them.
+them. Current method is very simplistic and naive, considering updatating to
+a BFS search style algorithm.
 (keep parameters const so that they are not overwritten)
 @param firstDoor first door to connect 
 @param secondDoor second door to connect
 */
 int connectRooms(const Position firstDoor, const Position secondDoor) {
+	Position temp;
+	Position prev;
+
+	int count = 0;
+
+	temp.x = firstDoor.x;
+	temp.y = firstDoor.y;
+
+	prev = temp;
+
+	while(1) {
+		/* left */
+		if((abs((temp.x - 1) - secondDoor.x) < abs(temp.x - secondDoor.x)) && (mvinch(temp.y, temp.x - 1) == ' ')) {
+			prev.x = temp.x;
+			temp.x = temp.x - 1;
+		 }
+		 /* right */
+		 else if((abs((temp.x + 1) - secondDoor.x) < abs(temp.x - secondDoor.x)) && (mvinch(temp.y, temp.x + 1) == ' ')) {
+			prev.x = temp.x;
+			temp.x = temp.x + 1;
+		 }
+		 /* down */
+		 else if((abs((temp.y + 1) - secondDoor.y) < abs(temp.y - secondDoor.y)) && (mvinch(temp.y + 1, temp.x) == ' ')) {
+			prev.y = temp.y;
+			temp.y = temp.y + 1;
+		 }
+		 /* up */
+		 else if((abs((temp.y - 1) - secondDoor.y) < abs(temp.y - secondDoor.y)) && (mvinch(temp.y - 1, temp.x) == ' ')) {
+			prev.y = temp.y;
+			temp.y = temp.y - 1;
+		 }
+		 else {
+		 	if(count == 0) {
+		 		temp = prev;
+		 		count++;
+		 		continue;
+		 	}
+		 	else
+		 		return 1;
+		 }
+
+		 /* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
+		 mvprintw(temp.y, temp.x, HALLWAY);
+		 //getch();
+	}
 
 
 
