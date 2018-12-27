@@ -15,18 +15,23 @@ Player * setUpPlayer();
 int renderMap();
 int renderPlayer(Player * player);
 
+int handleInput(int input, Player * player);
+int updatePlayerPosition(int newyPos, int newxPos, Player * player);
+
 
 int main() {
 	Player * player;
 	player = setUpPlayer();
-	int ch;
+	int input;
 
 	setUpScreen();
 	renderMap();
-	renderPlayer(player);
 	
-	while((ch = getch()) != 'q') {
-
+	
+	/* emulates main game loop */
+	while((input = getch()) != 'q') {
+		handleInput(input, player);
+		renderPlayer(player);
 	}
 
 	/* ends the ncurses mode */
@@ -83,3 +88,48 @@ int renderPlayer(Player * player) {
 	return 0;
 }
 
+
+int handleInput(int input, Player * player) {
+
+	switch(input) {
+		/* move up */
+		case 'W':
+		case 'w':
+			updatePlayerPosition(player->yPos - 1, player->xPos, player);
+			break;
+
+		/* move left */
+		case 'A':
+		case 'a':
+			updatePlayerPosition(player->yPos, player->xPos - 1, player);
+			break;
+
+		/* move down */
+		case 'S':
+		case 's':
+			updatePlayerPosition(player->yPos + 1, player->xPos, player);
+			break;
+
+		/* move right */
+		case 'D':
+		case 'd':
+			updatePlayerPosition(player->yPos, player->xPos + 1, player);
+			break;
+
+		default:
+			break;
+	}
+
+	return 0;
+}
+
+/* This functions updates the player position values and draws a floor tile at the
+   last player position.
+ */
+int updatePlayerPosition(int newyPos, int newxPos, Player * player) {
+
+	mvprintw(player->yPos, player->xPos, ".");
+	player->xPos = newxPos;
+	player->yPos = newyPos;
+	return 0;
+}
