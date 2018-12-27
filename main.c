@@ -1,18 +1,29 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
-typedef struct Player
-{
+#define NUM_OF_ROOMS 6   
+
+typedef struct Player {
 	int xPos;
 	int yPos;
 	int health;	
 } Player;
 
+typedef struct Room {
+	int xPos;
+	int yPos;
+	int width;
+	int height;
+} Room;
+
 
 int setUpScreen();
 Player * setUpPlayer();
 
-int renderMap();
+Room * createRoom(int x, int y, int h, int w);
+Room ** createRooms();
+int renderRoom(Room * room);
+
 int renderPlayer(Player * player);
 
 int handleInput(int input, Player * player);
@@ -20,15 +31,18 @@ int checkPosition(int newyPos, int newxPos, Player * player);
 int updatePlayerPosition(int newyPos, int newxPos, Player * player);
 
 
+
+
+
+
 int main() {
 	Player * player;
 	player = setUpPlayer();
 	
-	int input;
-
 	setUpScreen();
-	renderMap();
-	
+	createRooms();
+
+	int input;
 	/* emulates main game loop */
 	while((input = getch()) != 'q') {
 		handleInput(input, player);
@@ -71,16 +85,69 @@ Player * setUpPlayer() {
 }
 
 /*
-This function renders a map, currently this is hard coded.
+This function creates a single rooms with the defeined
+specificaions.
+@param x xpos of room
+@param y ypos of room
+@param h height of romm
+@param w width of room
 */
-int renderMap() {
-	/* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
-	mvprintw(13, 13, "--------");
-	mvprintw(14, 13, "|......|");
-	mvprintw(15, 13, "|......|");
-	mvprintw(16, 13, "|......|");
-	mvprintw(17, 13, "|......|");
-	mvprintw(18, 13, "--------");
+Room * createRoom(int x, int y, int h, int w) {
+	Room * newRoom;
+	newRoom = malloc(sizeof(Room));
+
+	newRoom->xPos = x;
+	newRoom->yPos = y;
+	newRoom->height = h;
+	newRoom->width = w;
+
+	return newRoom;
+}
+
+/*
+This function creates an array of rooms.
+*/
+Room ** createRooms() {
+	Room ** rooms;
+	rooms = malloc(sizeof(Room) * NUM_OF_ROOMS);
+
+	rooms[0] = createRoom(13, 13, 6, 8);
+	rooms[1] = createRoom(40, 2, 6, 8);
+	rooms[2] = createRoom(40, 10, 6, 12);
+
+	renderRoom(rooms[0]);
+	renderRoom(rooms[1]);
+	renderRoom(rooms[2]);
+
+	return rooms;
+}
+
+/*
+This fucntion renders a provided room.
+@param room room to render
+*/
+int renderRoom(Room * room) {
+	int x;
+	int y;
+
+	/* rendering top and bottom of room */
+	for(x = room->xPos; x < room->xPos + room->width; x++) {
+		/* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
+		mvprintw(room->yPos, x, "-");
+		mvprintw(room->yPos + room->height - 1, x, "-");
+	}
+
+	/* rendering interior and sides of room */
+	for(y = room->yPos + 1; y < room->yPos + room->height - 1; y++) {
+		/* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
+		mvprintw(y, room->xPos, "|");
+		mvprintw(y, room->xPos + room->width - 1, "|");
+		/* render interior of room */
+		for(x = room->xPos + 1;x < room->xPos + room->width - 1;x++) {
+			/* prints string at designated y,x location (note: y,x coordinate NOT x,y)*/
+			mvprintw(y, x, ".");
+		}
+	}
 
 	return 0;
 }
