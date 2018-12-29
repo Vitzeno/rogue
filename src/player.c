@@ -38,47 +38,43 @@ This function determines user input and handles each case.
 */
 int handleInput(int input, Player * player) {
 
-	int newY;
-	int newX;
+	Position * newPosition;
+	newPosition = malloc(sizeof(Position));
 	
 	switch(input) {
 		/* move up */
 		case 'W':
 		case 'w':
-			newY = player->position.y - 1;
-			newX = player->position.x;
-			//updatePlayerPosition(player->position.y - 1, player->position.x, player);
+			newPosition->y = player->position.y - 1;
+			newPosition->x = player->position.x;
 			break;
 
 		/* move left */
 		case 'A':
 		case 'a':
-			newY = player->position.y;
-			newX = player->position.x - 1;
-			//updatePlayerPosition(player->position.y, player->position.x - 1, player);
+			newPosition->y = player->position.y;
+			newPosition->x = player->position.x - 1;
 			break;
 
 		/* move down */
 		case 'S':
 		case 's':
-			newY = player->position.y + 1;
-			newX = player->position.x;
-			//updatePlayerPosition(player->position.y + 1, player->position.x, player);
+			newPosition->y = player->position.y + 1;
+			newPosition->x = player->position.x;
 			break;
 
 		/* move right */
 		case 'D':
 		case 'd':
-			newY = player->position.y;
-			newX = player->position.x + 1;
-			//updatePlayerPosition(player->position.y, player->position.x + 1, player);
+			newPosition->y = player->position.y;
+			newPosition->x = player->position.x + 1;
 			break;
 
 		default:
 			break;
 	}
 
-	checkPosition(newY, newX, player);
+	checkPosition(newPosition, player);
 
 	return 0;
 }
@@ -91,14 +87,14 @@ newPositionY.
 @param newPositionX the new x pos to check to
 @param player the player struct
 */
-int checkPosition(int newPositionY, int newPositionX, Player * player) {
+int checkPosition(Position * newPosition, Player * player) {
 
 	/* determines char at new position and what to do */
-	switch(mvinch(newPositionY, newPositionX)) {
+	switch(mvinch(newPosition->y, newPosition->x)) {
 		case '+':
 		case '#':
 		case '.':
-			updatePlayerPosition(newPositionY, newPositionX, player);
+			updatePlayerPosition(newPosition, player);
 			break;
 		default:
 			/* mvinch moves cursor to new pos, need to move back */
@@ -117,10 +113,10 @@ last player position.
 @param newPositionX the new x pos to update to
 @param player the player struct to update
  */
-int updatePlayerPosition(int newPositionY, int newPositionX, Player * player) {
+int updatePlayerPosition(Position * newPosition, Player * player) {
 
 	mvprintw(player->position.y, player->position.x, INTERIOR);
-	player->position.x = newPositionX;
-	player->position.y = newPositionY;
+	player->position.x = newPosition->x;
+	player->position.y = newPosition->y;
 	return 0;
 }

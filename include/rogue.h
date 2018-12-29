@@ -32,17 +32,27 @@ typedef struct Room {
 	Position doors[4];
 } Room;
 
+
+/**/
 int setUpScreen();
 
-Room * createRoom(int x, int y, int h, int w);
-Room ** createRooms();
-int renderRoom(Room * room);
-int connectRooms(const Position firstDoor,const Position secondDoor);
 
+/* player related functions in player.c */
 Player * setUpPlayer();
 int renderPlayer(Player * player);
 int handleInput(int input, Player * player);
-int checkPosition(int newPositionY, int newPositionX, Player * player);
-int updatePlayerPosition(int newPositionY, int newPositionX, Player * player);
+int checkPosition(Position * newPosition, Player * player);
+int updatePlayerPosition(Position * newPosition, Player * player);
+
+
+/* room related functions in room.c */
+Room * createRoom(int x, int y, int h, int w);
+int renderRoom(Room * room);
+int connectRooms(const Position firstDoor,const Position secondDoor);
+
+
+/* level related functions in level.c */
+Room ** createMap();
+char ** saveLevelState();
 
 #endif
