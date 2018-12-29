@@ -29,13 +29,19 @@ This function iterates though y and x and save the character at that
 position into a char array which it then returns.
 */
 char ** saveLevelState() {
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	int t_sizeY = w.ws_row;
+	int t_sizeX = w.ws_col;
+
 	int x, y;
 	char ** positions;
-	positions = malloc(sizeof(char *) * 50);
+	positions = malloc(sizeof(char *) * t_sizeY);
 
-	for(y = 0;y < 50;y++) {
-		positions[y] = malloc(sizeof(char) * 150);
-		for(x = 0;x < 150;x++) {
+	
+
+	for(y = 0;y < t_sizeY;y++) {
+		positions[y] = malloc(sizeof(char) * t_sizeX);
+		for(x = 0;x < t_sizeX;x++) {
 			positions[y][x] = mvinch(y, x);
 		}
 	}

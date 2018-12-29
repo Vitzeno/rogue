@@ -4,6 +4,9 @@
 #include <ncurses.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
 
 #define NUM_OF_ROOMS 6   
 
@@ -13,6 +16,9 @@
 #define INTERIOR "."
 #define HALLWAY "#"
 #define PLAYER "@"
+
+/* used to get the size of the terminal */
+struct winsize w;
 
 typedef struct Position {
 	int x;

@@ -12,9 +12,13 @@ int main() {
 	char ** levelState = saveLevelState();
 	Position * newPosition;
 
+
 	int input;
 	/* emulates main game loop */
 	while((input = getch()) != 'q') {
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	    mvprintw(0, 0, "lines %d columns %d", w.ws_row, w.ws_col);
+
 		newPosition = handleInput(input, player);
 		checkPosition(newPosition, player, levelState);
 		renderPlayer(player);
