@@ -8,8 +8,8 @@ Player * setUpPlayer() {
 	Player * newPlayer;
 	newPlayer = (Player * )malloc(sizeof(Player));
 
-	newPlayer->position.x = 15;
-	newPlayer->position.y = 15;
+	newPlayer->position.x = 16;
+	newPlayer->position.y = 14;
 	newPlayer->health = 3;
 
 	return newPlayer;
@@ -36,7 +36,7 @@ This function determines user input and handles each case.
 @param input the provided char intput in int form
 @param player the player struct
 */
-int handleInput(int input, Player * player) {
+Position * handleInput(int input, Player * player) {
 
 	Position * newPosition;
 	newPosition = malloc(sizeof(Position));
@@ -74,27 +74,28 @@ int handleInput(int input, Player * player) {
 			break;
 	}
 
-	checkPosition(newPosition, player);
+	//checkPosition(newPosition, player);
 
-	return 0;
+	return newPosition;
 }
 
 
 /*
-This function determines whats in the postion provided at newPositionY and
-newPositionY.
-@param newPositionY the new y pos to check to
-@param newPositionX the new x pos to check to
+This function determines whats in the postion provided by the position
+struct. Furthermore this function calls the updatePlayerPosition
+functions if positions is valid.
+@param newPosition the new position struct to check 
 @param player the player struct
+@param levelState char array contatining level state
 */
-int checkPosition(Position * newPosition, Player * player) {
+int checkPosition(Position * newPosition, Player * player, char ** levelState) {
 
 	/* determines char at new position and what to do */
 	switch(mvinch(newPosition->y, newPosition->x)) {
 		case '+':
 		case '#':
 		case '.':
-			updatePlayerPosition(newPosition, player);
+			updatePlayerPosition(newPosition, player, levelState);
 			break;
 		default:
 			/* mvinch moves cursor to new pos, need to move back */
@@ -109,13 +110,16 @@ int checkPosition(Position * newPosition, Player * player) {
 /* 
 This functions updates the player position values and draws a floor tile at the
 last player position.
-@param newPositionY the new y pos to update to
-@param newPositionX the new x pos to update to
+@param newPosition the new position struct to check 
 @param player the player struct to update
+@param levelState char array contatining level state
  */
-int updatePlayerPosition(Position * newPosition, Player * player) {
+int updatePlayerPosition(Position * newPosition, Player * player, char ** levelState) {
 
-	mvprintw(player->position.y, player->position.x, INTERIOR);
+	char buffer[8];
+	sprintf(buffer, "%c", levelState[player->position.y][player->position.x]);
+
+	mvprintw(player->position.y, player->position.x, buffer);
 	player->position.x = newPosition->x;
 	player->position.y = newPosition->y;
 	return 0;

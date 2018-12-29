@@ -31,11 +31,11 @@ position into a char array which it then returns.
 char ** saveLevelState() {
 	int x, y;
 	char ** positions;
-	positions = malloc(sizeof(char *) * 25);
+	positions = malloc(sizeof(char *) * 50);
 
-	for(y = 0;y < 25;y++) {
-		positions[y] = malloc(sizeof(char) * 100);
-		for(x = 0;x < 100;x++) {
+	for(y = 0;y < 50;y++) {
+		positions[y] = malloc(sizeof(char) * 150);
+		for(x = 0;x < 150;x++) {
 			positions[y][x] = mvinch(y, x);
 		}
 	}

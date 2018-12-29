@@ -40,9 +40,9 @@ int setUpScreen();
 /* player related functions in player.c */
 Player * setUpPlayer();
 int renderPlayer(Player * player);
-int handleInput(int input, Player * player);
-int checkPosition(Position * newPosition, Player * player);
-int updatePlayerPosition(Position * newPosition, Player * player);
+Position * handleInput(int input, Player * player);
+int checkPosition(Position * newPosition, Player * player, char ** levelState);
+int updatePlayerPosition(Position * newPosition, Player * player, char ** levelState);
 
 
 /* room related functions in room.c */

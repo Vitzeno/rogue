@@ -9,12 +9,14 @@ int main() {
 	createMap();
 
 	/* save positions only after creating map */
-	char ** level = saveLevelState();
+	char ** levelState = saveLevelState();
+	Position * newPosition;
 
 	int input;
 	/* emulates main game loop */
 	while((input = getch()) != 'q') {
-		handleInput(input, player);
+		newPosition = handleInput(input, player);
+		checkPosition(newPosition, player, levelState);
 		renderPlayer(player);
 	}
 
