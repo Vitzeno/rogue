@@ -16,8 +16,8 @@ int main() {
 	int input;
 	/* emulates main game loop */
 	while((input = getch()) != 'q') {
-		ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	    mvprintw(0, 0, "lines %d columns %d", w.ws_row, w.ws_col);
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &terminalAttrib);
+	    mvprintw(0, 0, "Rogue (lines: %d columns: %d)", terminalAttrib.ws_row, terminalAttrib.ws_col);
 
 		newPosition = handleInput(input, player);
 		checkPosition(newPosition, player, levelState);
@@ -37,8 +37,6 @@ This function sets up the ncurses window.
 int setUpScreen() {
 	/* starts the ncurses mode */
 	initscr();	
-	/* prints string at cursor location */
-	printw("Rogue");
 	/* turns of echo when typing */
 	noecho();	
 	refresh();

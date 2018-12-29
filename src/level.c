@@ -29,9 +29,9 @@ This function iterates though y and x and save the character at that
 position into a char array which it then returns.
 */
 char ** saveLevelState() {
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	int t_sizeY = w.ws_row;
-	int t_sizeX = w.ws_col;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &terminalAttrib);
+	int t_sizeY = terminalAttrib.ws_row;
+	int t_sizeX = terminalAttrib.ws_col;
 
 	int x, y;
 	char ** positions;

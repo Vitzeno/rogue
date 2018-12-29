@@ -18,11 +18,11 @@
 #define PLAYER "@"
 
 /* used to get the size of the terminal */
-struct winsize w;
+struct winsize terminalAttrib;
 
 typedef struct Position {
-	int x;
 	int y;
+	int x;
 } Position;
 
 typedef struct Player {
