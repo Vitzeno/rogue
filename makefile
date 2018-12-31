@@ -11,4 +11,4 @@ rogue:
 run:
 	./rogue
 clean:
-	rm rogue
+	rm -f rogue

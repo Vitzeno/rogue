@@ -6,11 +6,11 @@ int main() {
 
 	Player * player;
 	player = setUpPlayer();
-	
-	Level * level;
-	level = createLevel(1);
 
 	Position * newPosition;
+
+	Level * level;
+	level = createLevel(1);
 
 	int input;
 	/* emulates main game loop */
