@@ -8,4 +8,6 @@ Cautions
 
 -The coordinate system for ncurses starts from the top left-hand corner of the screen. This means +y is downwards. Furthermore ncurses functions such as mvprintw work using a (y, x) system instead of a (x, y) like usual.
 
+-A NUM_OF_ROOMS constant is definied in rogue.h, when usiing the createRooms() function in level.c make sure the same number of rooms are created to avoid segmentation faults. This should be remidied in the future once rooms are randomly generated.
+
 For some parts of this project I have been following an online tutorial, I've made changes where I've seen fit and made sense. Furthermore, since the tutorial series is incomplete I plan to take this project further in my spare time.
