@@ -30,6 +30,15 @@ typedef struct Player {
 	int health;	
 } Player;
 
+typedef struct Level {
+	char ** tiles;
+	int level;
+	int numOfRooms;
+	struct Room ** rooms;
+	int numOfMonsters;
+	struct Monsters ** monsters;
+} Level;
+
 typedef struct Room {
 	Position position;
 	int width;
@@ -58,7 +67,8 @@ int connectRooms(const Position firstDoor,const Position secondDoor);
 
 
 /* level related functions in level.c */
-Room ** createMap();
+Level * createLevel(int level);
+Room ** createRooms();
 char ** saveLevelState();
 
 #endif

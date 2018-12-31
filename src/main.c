@@ -2,16 +2,15 @@
 
 
 int main() {
+	setUpScreen();
+
 	Player * player;
 	player = setUpPlayer();
 	
-	setUpScreen();
-	createMap();
+	Level * level;
+	level = createLevel(1);
 
-	/* save positions only after creating map */
-	char ** levelState = saveLevelState();
 	Position * newPosition;
-
 
 	int input;
 	/* emulates main game loop */
@@ -20,7 +19,7 @@ int main() {
 	    mvprintw(0, 0, "Rogue (lines: %d columns: %d)", terminalAttrib.ws_row, terminalAttrib.ws_col);
 
 		newPosition = handleInput(input, player);
-		checkPosition(newPosition, player, levelState);
+		checkPosition(newPosition, player, level->tiles);
 		renderPlayer(player);
 	}
 

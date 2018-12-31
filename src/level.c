@@ -1,10 +1,25 @@
 #include <rogue.h>
 
+/*
+This functions exists to create the level
+@param level this is the current level numbr to create
+*/
+Level * createLevel(int level) {
+	Level * newLevel;
+	newLevel = malloc(sizeof(Level));
+
+	newLevel->level = level;
+	newLevel->numOfRooms = NUM_OF_ROOMS;
+	newLevel->rooms = createRooms();
+	newLevel->tiles = saveLevelState();
+
+	return newLevel;
+}
 
 /*
 This function creates an array of rooms.
 */
-Room ** createMap() {
+Room ** createRooms() {
 	Room ** rooms;
 	rooms = malloc(sizeof(Room) * NUM_OF_ROOMS);
 
