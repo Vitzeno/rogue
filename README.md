@@ -10,4 +10,6 @@ Cautions
 
 -A NUM_OF_ROOMS constant is definied in rogue.h, when usiing the createRooms() function in level.c make sure the same number of rooms are created to avoid segmentation faults. This should be remidied in the future once rooms are randomly generated.
 
+-Room connection algorithm is very basic right now, I plan to use an A* pathing algorithm to connect rooms in the future.
+
 For some parts of this project I have been following an online tutorial, I've made changes where I've seen fit and made sense. Furthermore, since the tutorial series is incomplete I plan to take this project further in my spare time.
